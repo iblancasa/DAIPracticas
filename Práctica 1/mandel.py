@@ -18,8 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import time
-from graphics import *
 import png
+import os
 
 class Mandelbrot:
   __x1=0
@@ -65,8 +65,7 @@ class Mandelbrot:
     
     p=[]
 
-    #im = Image(Point(0,0), imgx, imgy)   
-    
+    completado = 0
 
     it = 0
 
@@ -77,26 +76,19 @@ class Mandelbrot:
         zx = x * (xb - xa) / (imgx - 1)  + xa
         z = zx + zy * 1j
         c = z
-        
-        
-
         for i in range(maxIt):
           it = it + 1
           if abs(z) > 2.0: break 
           z = z * z + c
-        
-        print "antes de todooo"
-        print len(a)
         i = maxIt - i
-        col = color_rgb(i%10*25, i%16*16, i%8*32)
         a = a + (i%10*25, i%16*16, i%8*32);
-        print "despues de todooo"
-        print len(a)
-      #  im.setPixel(x, y, col)
-      p.append(a) 
 
-    #im.save(self.__nombre);  # Grabamos en formato PPM
-    
+      p.append(a) 
+      completado = int(100*y/imgy)
+      
+      if completado%10 ==0:
+        os.system('clear')
+        print str(completado) + "%"
 
     f = open('swatch.png', 'wb')
     w = png.Writer(imgy, imgx)
@@ -105,7 +97,6 @@ class Mandelbrot:
     print type(p)
     print 400*400
     print it
-   # print len(a)*len(p)
 
     
         
