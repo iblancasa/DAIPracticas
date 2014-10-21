@@ -19,7 +19,7 @@
 
 import time
 from graphics import *
-
+import png
 
 class Mandelbrot:
   __x1=0
@@ -52,6 +52,8 @@ class Mandelbrot:
 
 
   def pintaMandelbrot(self):
+
+    
     xa = self.__x1
     xb = self.__x2
     ya = self.__y1
@@ -61,31 +63,51 @@ class Mandelbrot:
     imgx = self.__ancho
     imgy = int(abs (self.__y2 - self.__y1) * self.__ancho / abs(self.__x2 - self.__x1));
     
-    im = Image(Point(0,0), imgx, imgy)   
+    p=[]
+
+    #im = Image(Point(0,0), imgx, imgy)   
     
+
+    it = 0
+
     for y in range(imgy):
       zy = y * (yb - ya) / (imgy - 1)  + ya
-      
+      a = ()
       for x in range(imgx):
         zx = x * (xb - xa) / (imgx - 1)  + xa
         z = zx + zy * 1j
         c = z
         
-        for i in range(maxIt):
-          if abs(z) > 2.0: break 
-          z = z * z + c
-          
-        i = maxIt - i
-        col = color_rgb(i%10*25, i%16*16, i%8*32)
-          
-        im.setPixel(x, y, col)
         
 
-    im.save(self.__nombre);  # Grabamos en formato PPM
-          
-          
+        for i in range(maxIt):
+          it = it + 1
+          if abs(z) > 2.0: break 
+          z = z * z + c
+        
+        print "antes de todooo"
+        print len(a)
+        i = maxIt - i
+        col = color_rgb(i%10*25, i%16*16, i%8*32)
+        a = a + (i%10*25, i%16*16, i%8*32);
+        print "despues de todooo"
+        print len(a)
+      #  im.setPixel(x, y, col)
+      p.append(a) 
 
- 
+    #im.save(self.__nombre);  # Grabamos en formato PPM
+    
+
+    f = open('swatch.png', 'wb')
+    w = png.Writer(imgy, imgx)
+    w.write(f, p) ; 
+    f.close()
+    print type(p)
+    print 400*400
+    print it
+   # print len(a)*len(p)
+
+    
         
 if __name__ == "__main__":
     nuevo = Mandelbrot(-0.7, -0.7, -0.4, -0.4, 400, 255, "fich.png");
