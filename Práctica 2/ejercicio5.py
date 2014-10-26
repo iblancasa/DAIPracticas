@@ -1,11 +1,41 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-
-
 import time
 import png
 import os
+import web
+from web import form
+
+urls = ('/', 'index')
+app = web.application(urls, globals())
+
+myform = form.Form( 
+    form.Textbox("x1", description="X1"),
+    form.Textbox("x2", description="X2"),
+    form.Textbox("y1", description="Y1"),
+    form.Textbox("y2", description="Y2"),
+    form.Textbox("ancho", description="ancho"),
+    form.Textbox("iteraciones", description="iteraciones"),
+    form.Button("enviar",type="submit",value="Enviar"),
+    )
+
+
+
+class index: 
+    def GET(self): 
+      form = myform()
+      return "<html><body><form name=\"main\" method=\"post\"> "+form.render()+"</form></body></html>"
+
+    def POST(self): 
+      form = myform() 
+      if not form.validates(): 
+        return "<html><body><form name=\"main\" method=\"post\"> "+form.render()+"</form></body></html>"
+      else:
+        nuevo = Mandelbrot(form['x1'].value, form['y1'].value, form['x2'].value, form['y2'].value, form['ancho'].value, form['iteraciones'].value, "fich.png");
+        nuevo.pintaMandelbrot();
+        return "<html><body><img src=\"fich.png\"/></body></html>"
+
 
 class Mandelbrot:
   __x1=0
@@ -33,8 +63,7 @@ class Mandelbrot:
       self.__iteraciones=1;
     else:
       self.__iteraciones=iteracionesadar
-    
-    self.__nombre=nombrefichero
+ 
 
 
   def pintaMandelbrot(self):
@@ -76,17 +105,8 @@ class Mandelbrot:
         os.system('clear')
         print str(completado) + "%"
 
-    self.__nombre=str(self.__x1)+"-"+str(self.__x2)+"-"+str(self.__y1)+"-"+str(self.__y2)+"-"+str(self.__ancho)+"-"+str(self.__iteraciones)+".png"
-    print self.__nombre
-    print self.__x1
-    print self.__x2
-    print self.__y1
-    print self.__y2
-    print self.__ancho
-    print self.__iteraciones
 
-
-    f = open(self.__nombre, 'wb')
+    f = open("fich.png", 'wb')
     w = png.Writer(imgy, imgx)
     w.write(f, p) ; 
     f.close()
@@ -95,5 +115,4 @@ class Mandelbrot:
     
         
 if __name__ == "__main__":
-    nuevo = Mandelbrot(-0.7, -0.7, -0.4, -0.4, 400, 255, "fich.png");
-    nuevo.pintaMandelbrot();
+  app.run()
