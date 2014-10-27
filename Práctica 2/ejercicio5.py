@@ -31,8 +31,11 @@ class index:
       form = myform() 
       if not form.validates(): 
         return "<html><body><form name=\"main\" method=\"post\"> "+form.render()+"</form></body></html>"
-      else:
-        nuevo = Mandelbrot(-0.7, -0.7, -0.4, -0.4, 400, 255, "fich.png");
+      else:   
+        nuevo = Mandelbrot(float(form['x1'].value), float(form['y1'].value), float(form['x2'].value), float(form['y2'].value), int(form['ancho'].value),int(form['iteraciones'].value), "fich.png");
+
+
+
         nuevo.pintaMandelbrot();
         return "<html><body><img src=\"static/fich.png\"/></body></html>"
 
@@ -55,7 +58,6 @@ class Mandelbrot:
     self.__y1=ya
     self.__y2=yb
     self.__ancho=anchoim
-    print self.__x1
     self.__alto = int(abs (self.__y2 - self.__y1) * self.__ancho / abs(self.__x2 - self.__x1))
 
     if iteracionesadar > 1000:
