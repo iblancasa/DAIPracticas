@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" baseProfile="full" height="100" width="200" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+<style>
+  rect{
+    stroke:	black;
+    stroke-width:	2;
+    fill:	green;
+  }
+  </style>
+
+    <rect y="40" x="20" height="50" width="80"/>
+    <circle cy="40" cx="120" r="25"/>
+</svg>
