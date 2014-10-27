@@ -33,9 +33,6 @@ class index:
         return "<html><body><form name=\"main\" method=\"post\"> "+form.render()+"</form></body></html>"
       else:   
         nuevo = Mandelbrot(float(form['x1'].value), float(form['y1'].value), float(form['x2'].value), float(form['y2'].value), int(form['ancho'].value),int(form['iteraciones'].value), "fich.png");
-
-
-
         nuevo.pintaMandelbrot();
         return "<html><body><img src=\"static/fich.png\"/></body></html>"
 
