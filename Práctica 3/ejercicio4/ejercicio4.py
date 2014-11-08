@@ -1,0 +1,227 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
+
+import web
+from web import form
+from web.contrib.template import render_mako
+
+urls = (
+        '/web1','web1',
+        '/web2','web2',
+        '/web3','web3',
+        '/web4','web4',
+        '/salir','logout',
+        '/', 'index'
+        )
+
+app = web.application(urls, globals(), autoreload=False)
+
+
+render = render_mako(
+        directories=['templates'],
+        input_encoding='utf-8',
+        output_encoding='utf-8',
+        )
+
+myform = form.Form(
+        form.Textbox('user', description="User"),
+        form.Password('password',description="Pass"),
+        form.Button('Enviar',type="submit")
+    )
+
+
+vemail = form.regexp(r".*@.*", "Debe ser un email valido")
+vvisa = form.regexp(r"[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}", "Debe ser una visa valida")
+vpass = form.regexp('.{7,}', "Debe tener 7 caracteres o mas")
+
+registro = form.Form(
+    form.Textbox('nombre',form.Validator("El nombre no puede estar vacio", lambda i: i !=""),description="Nombre"),
+    form.Textbox('apellidos',form.Validator("Los apellidos no pueden estar vacios", lambda i: i !=""),description="Apellidos"),
+    form.Textbox('correo',vemail,description="Correo"),
+    form.Dropdown('dianacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
+     (9, '9'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), 
+     (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31')],description="Dia de nacimiento"),
+     form.Dropdown('mesnacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
+     (9, '9'), (10, '10'), (11, '11'), (12, '12')],description="Mes de nacimiento"),
+    form.Dropdown('anonacimiento',[(1993,'1993'),(1992,'1992'),(1991,'1991')],description="Ano nacimiento"),
+    form.Textarea('direccion',form.Validator("La direccion no puede estar vacia", lambda i: i !=""),description="Direccion"),
+    form.Password('password',vpass,description="Password"),
+    form.Password('password2',vpass,description="Verificacion"),
+    form.Textbox('visa',vvisa,description="Numero visa"),
+    form.Radio('formapago',['Contra reembolso','Tarjeta Visa']),
+    form.Checkbox('aceptacion', form.Validator("Acepta las clausulas", lambda i: i == 'true'), value='true'),
+    form.Button('submit',type="submit", description="Enviar"),
+    validators = [
+        form.Validator("Las pass no coinciden", lambda i: i.password == i.password2)]
+)
+
+
+
+session = web.session.Session(app, web.session.DiskStore('sessions'),initializer={'iniciado': False})
+
+
+def addWeb(web):
+        if session.get('iniciado') != True:
+            session.visitadas2="http://google.es"
+            session.visitadas1="http://google.es"
+            session.visitadas0="http://google.es"
+            session.iniciado = True
+            print session.iniciado
+
+        session.visitadas2=session.get('visitadas1')
+        session.visitadas1=session.get('visitadas0')
+        session.visitadas0=web
+
+        session.enlaces = "<ul><li><a href=\""+session.get('visitadas0')+"\">"+session.get('visitadas0')+"</a></li>\
+        <li><a href=\""+session.get('visitadas1')+"\">"+session.get('visitadas1')+"</a></li>\
+        <li><a href=\""+session.get('visitadas2')+"\">"+session.get('visitadas2')+"</a></li></ul>"
+
+
+
+
+class index:
+    def GET(self):
+        form = myform()
+        nuevousuario = registro()
+        if session.get('usuario') == None:
+            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
+        else:
+            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
+        addWeb("/")
+        formularioRegistro =  "<form name=\"main\" method=\"post\"> "+nuevousuario.render()+"</form>"
+        return render.index(form=cabecera,enlaces=session.get('enlaces'),registro=formularioRegistro)
+
+
+
+    def POST(self):
+        form = myform()
+        nuevousuario = registro()
+        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')): 
+            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form><p>EL LOGIN FALLO</p>"
+        else:
+            session.usuario = form.d.user
+            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
+        addWeb("/")
+        formularioRegistro =  "<form name=\"main\" method=\"post\"> "+nuevousuario.render()+"</form>"
+        return render.index(form=cabecera,enlaces=session.get('enlaces'),registro=formularioRegistro)
+
+
+
+
+class web1:
+    def GET(self):
+        form = myform()
+        if session.get('usuario') == None:
+            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
+        else:
+            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
+        self.addWeb("web1")
+        return render.pagina1(form=cabecera,enlaces=session.get('enlaces'))
+
+    def addWeb(self,web):
+        if session.iniciado==False:
+            session.visitadas2="http://google.es"
+            session.visitadas1="http://google.es"
+            session.visitadas0="http://google.es"
+            session.iniciado = True
+            print session.iniciado
+
+        session.visitadas2=session.get('visitadas1')
+        session.visitadas1=session.get('visitadas0')
+        session.visitadas0=web
+
+        session.enlaces = "<ul><li><a href=\""+session.get('visitadas0')+"\">"+session.get('visitadas0')+"</a></li>\
+        <li><a href=\""+session.get('visitadas1')+"\">"+session.get('visitadas1')+"</a></li>\
+        <li><a href=\""+session.get('visitadas2')+"\">"+session.get('visitadas2')+"</a></li></ul>"
+
+    def POST(self):
+        form = myform()
+        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')): 
+            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form><p>EL LOGIN FALLO</p>"
+        else:
+            session.usuario = form.d.user
+            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
+        addWeb("web1")
+        return render.pagina1(form=cabecera,enlaces=session.get('enlaces'))
+
+class web2:
+    def GET(self):
+        form = myform()
+        if session.get('usuario') == None:
+            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
+        else:
+            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
+        addWeb("web2")
+        return render.pagina2(form=cabecera,enlaces=session.get('enlaces'))
+
+
+
+
+    def POST(self):
+        form = myform()
+        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')): 
+            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form><p>EL LOGIN FALLO</p>"
+        else:
+            session.usuario = form.d.user
+            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
+        addWeb("web2")
+           
+        return render.pagina2(form=cabecera,enlaces=session.get('enlaces'))
+
+class web3:
+    def GET(self):
+        form = myform()
+        if session.get('usuario') == None:
+            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
+        else:
+            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
+        addWeb("web3")
+        return render.pagina3(form=cabecera,enlaces=session.get('enlaces'))
+
+
+
+    def POST(self):
+        form = myform()
+        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')): 
+            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form><p>EL LOGIN FALLO</p>"
+        else:
+            session.usuario = form.d.user
+            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
+        addWeb("web3")
+           
+        return render.pagina3(form=cabecera,enlaces=session.get('enlaces'))
+
+class web4:
+    def GET(self):
+        form = myform()
+        if session.get('usuario') == None:
+            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
+        else:
+            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
+        addWeb("web4")
+        return render.pagina4(form=cabecera,enlaces=session.get('enlaces'))
+
+
+
+
+    def POST(self):
+        form = myform()
+        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')): 
+            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form><p>EL LOGIN FALLO</p>"
+        else:
+            session.usuario = form.d.user
+            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
+        addWeb("web4")
+        return render.pagina4(form=cabecera,enlaces=session.get('enlaces'))
+
+
+
+
+class logout:
+    def GET(self):
+        session.kill()
+        raise web.seeother('/')
+
+
+if __name__ == "__main__":
+    app.run()
