@@ -5,6 +5,8 @@ import web
 from web import form
 from web.contrib.template import render_mako
 
+import DataBase
+
 urls = (
         '/web1','web1',
         '/web2','web2',
@@ -25,7 +27,7 @@ render = render_mako(
 
 myform = form.Form(
         form.Textbox('user', description="User"),
-        form.Password('password',description="Pass"),
+        form.Password('contrasena',description="Pass"),
         form.Button('Enviar',type="submit")
     )
 
@@ -59,6 +61,14 @@ registro = form.Form(
 
 session = web.session.Session(app, web.session.DiskStore('sessions'),initializer={'iniciado': False})
 
+def login(usuario,contrasena):
+	if usuario=="" or contrasena=="" or usuario==None or contrasena==None:
+		return False
+	elif usuario == DataBase.getNombre() and contrasena == DataBase.getPassword():
+		return True
+	else:
+		return False
+
 
 def addWeb(web):
         if session.get('iniciado') != True:
@@ -72,7 +82,7 @@ def addWeb(web):
         session.visitadas1=session.get('visitadas0')
         session.visitadas0=web
 
-        session.enlaces = "<ul><li><a href=\""+session.get('visitadas0')+"\">"+session.get('visitadas0')+"</a></li>\
+        session.enlaces = "<ul><li><a href=\"modificar\">Modificar</a><li><a href=\""+session.get('visitadas0')+"\">"+session.get('visitadas0')+"</a></li>\
         <li><a href=\""+session.get('visitadas1')+"\">"+session.get('visitadas1')+"</a></li>\
         <li><a href=\""+session.get('visitadas2')+"\">"+session.get('visitadas2')+"</a></li></ul>"
 
@@ -96,13 +106,21 @@ class index:
     def POST(self):
         form = myform()
         nuevousuario = registro()
-        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')): 
-            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form><p>EL LOGIN FALLO</p>"
+        if (not form.validates() or not login(form.d.user,form.d.contrasena)) and (not hasattr(session, 'usuario')): 
+            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
+            if not nuevousuario.validates():
+            	formularioRegistro =  "<form name=\"main\" method=\"post\"> "+nuevousuario.render()+"</form>"
+            else:
+            	formularioRegistro=""
+            	DataBase.insertar(nuevousuario.d.nombre,nuevousuario.d.apellidos,nuevousuario.d.correo,nuevousuario.d.dianacimiento,nuevousuario.d.mesnacimiento,
+            		nuevousuario.d.anonacimiento,nuevousuario.d.direccion,nuevousuario.d.password,nuevousuario.d.visa,nuevousuario.d.formapago)
         else:
             session.usuario = form.d.user
             cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
+            formularioRegistro=""
+
         addWeb("/")
-        formularioRegistro =  "<form name=\"main\" method=\"post\"> "+nuevousuario.render()+"</form>"
+
         return render.index(form=cabecera,enlaces=session.get('enlaces'),registro=formularioRegistro)
 
 
@@ -133,16 +151,18 @@ class web1:
         session.enlaces = "<ul><li><a href=\""+session.get('visitadas0')+"\">"+session.get('visitadas0')+"</a></li>\
         <li><a href=\""+session.get('visitadas1')+"\">"+session.get('visitadas1')+"</a></li>\
         <li><a href=\""+session.get('visitadas2')+"\">"+session.get('visitadas2')+"</a></li></ul>"
-
+    
     def POST(self):
         form = myform()
-        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')): 
-            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form><p>EL LOGIN FALLO</p>"
+       	if (not form.validates() or not login(form.d.user,form.d.contrasena)) and (not hasattr(session, 'usuario')): 
+            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
             cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
         addWeb("web1")
-        return render.pagina1(form=cabecera,enlaces=session.get('enlaces'))
+           
+        return render.pagina2(form=cabecera,enlaces=session.get('enlaces'))
+
 
 class web2:
     def GET(self):
@@ -159,8 +179,8 @@ class web2:
 
     def POST(self):
         form = myform()
-        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')): 
-            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form><p>EL LOGIN FALLO</p>"
+       	if (not form.validates() or not login(form.d.user,form.d.contrasena)) and (not hasattr(session, 'usuario')): 
+            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
             cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
@@ -182,8 +202,8 @@ class web3:
 
     def POST(self):
         form = myform()
-        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')): 
-            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form><p>EL LOGIN FALLO</p>"
+        if (not form.validates() or not login(form.d.user,form.d.contrasena)) and (not hasattr(session, 'usuario')): 
+            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
             cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
@@ -206,8 +226,8 @@ class web4:
 
     def POST(self):
         form = myform()
-        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')): 
-            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form><p>EL LOGIN FALLO</p>"
+       	if (not form.validates() or not login(form.d.user,form.d.contrasena)) and (not hasattr(session, 'usuario')): 
+            cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
             cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"

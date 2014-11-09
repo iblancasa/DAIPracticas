@@ -32,6 +32,9 @@ def getDiaNacimiento():
 def getMesNacimiento():
 	return db['dianacimiento']
 
+def getPassword():
+	return db['password']
+
 def getAnoNacimiento():
 	return db['anonacimiento']
 
