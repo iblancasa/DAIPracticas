@@ -83,7 +83,7 @@ def addWeb(web):
         session.visitadas1=session.get('visitadas0')
         session.visitadas0=web
 
-        session.enlaces = "<ul><li><a href=\""+session.get('visitadas0')+"\">"+session.get('visitadas0')+"</a></li>\
+        session.enlaces = "<ul><li><a href=\"modificar\">Modificar</a><li><a href=\""+session.get('visitadas0')+"\">"+session.get('visitadas0')+"</a></li>\
         <li><a href=\""+session.get('visitadas1')+"\">"+session.get('visitadas1')+"</a></li>\
         <li><a href=\""+session.get('visitadas2')+"\">"+session.get('visitadas2')+"</a></li></ul>"
 
@@ -118,7 +118,7 @@ class index:
             	DataBase.close()
         else:
             session.usuario = form.d.user
-            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a> <li><a href=\"modificar\">Modificar</a><li> "
+            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
             formularioRegistro=""
 
         addWeb("/")
@@ -134,7 +134,7 @@ class web1:
         if session.get('usuario') == None:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
-            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a> <li><a href=\"modificar\">Modificar</a><li> "
+            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
         self.addWeb("web1")
         return render.pagina1(form=cabecera,enlaces=session.get('enlaces'))
 
@@ -160,7 +160,7 @@ class web1:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
-            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a> <li><a href=\"modificar\">Modificar</a><li> "
+            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
         addWeb("web1")
            
         return render.pagina2(form=cabecera,enlaces=session.get('enlaces'))
@@ -172,7 +172,7 @@ class web2:
         if session.get('usuario') == None:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
-            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a> <li><a href=\"modificar\">Modificar</a><li> "
+            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
         addWeb("web2")
         return render.pagina2(form=cabecera,enlaces=session.get('enlaces'))
 
@@ -185,7 +185,7 @@ class web2:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
-            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a> <li><a href=\"modificar\">Modificar</a><li> "
+            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
         addWeb("web2")
            
         return render.pagina2(form=cabecera,enlaces=session.get('enlaces'))
@@ -196,7 +196,7 @@ class web3:
         if session.get('usuario') == None:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
-            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a> <li><a href=\"modificar\">Modificar</a><li> "
+            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
         addWeb("web3")
         return render.pagina3(form=cabecera,enlaces=session.get('enlaces'))
 
@@ -208,7 +208,7 @@ class web3:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
-            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a> <li><a href=\"modificar\">Modificar</a><li> "
+            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
         addWeb("web3")
            
         return render.pagina3(form=cabecera,enlaces=session.get('enlaces'))
@@ -219,7 +219,7 @@ class web4:
         if session.get('usuario') == None:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
-            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a> <li><a href=\"modificar\">Modificar</a><li> "
+            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
         addWeb("web4")
         return render.pagina4(form=cabecera,enlaces=session.get('enlaces'))
 
@@ -232,7 +232,7 @@ class web4:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
-            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a> <li><a href=\"modificar\">Modificar</a><li> "
+            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
         addWeb("web4")
         return render.pagina4(form=cabecera,enlaces=session.get('enlaces'))
 
@@ -262,7 +262,7 @@ class modificar:
 		)
 
 	def GET(self):
-		cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a> <li><a href=\"modificar\">Modificar</a><li> "
+		cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
 		self.registro = form.Form(
 		    form.Textbox('nombre',form.Validator("El nombre no puede estar vacio", lambda i: i !=""),description="Nombre",value=DataBase.getNombre()),
 		    form.Textbox('apellidos',form.Validator("Los apellidos no pueden estar vacios", lambda i: i !=""),description="Apellidos",value=DataBase.getApellidos()),
@@ -291,7 +291,7 @@ class modificar:
 
 	def POST(self):
 		formulariomodificar = self.registro()
-		cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a> <li><a href=\"modificar\">Modificar</a><li>"
+		cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
 		if formulariomodificar.validates():
 			DataBase.insertar(formulariomodificar.d.nombre,formulariomodificar.d.apellidos,formulariomodificar.d.correo,formulariomodificar.d.dianacimiento,formulariomodificar.d.mesnacimiento,
     			formulariomodificar.d.anonacimiento,formulariomodificar.d.direccion,formulariomodificar.d.password,formulariomodificar.d.visa,formulariomodificar.d.formapago)
