@@ -1,52 +1,76 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
-import anydbm
 
-db = anydbm.open('basedatos.db', 'c')
+import pymongo
+from pymongo import MongoClient
+
+connection = MongoClient()
+db = connection.usuarios.usuarios
 
 def insertar(nombre,apellidos,correo,dianacimiento,mesnacimiento,anonacimiento,direccion,password,numerovisa,formapago):
-	db['nombre'] = nombre
-	db['apellidos'] = apellidos
-	db['correo'] = correo
-	db['dianacimiento'] = dianacimiento
-	db['mesnacimiento'] = mesnacimiento
-	db['anonacimiento'] = anonacimiento
-	db['direccion'] = direccion
-	db['password'] = password
-	db['numerovisa'] = numerovisa
-	db['formapago'] = formapago
+	usuario = {'nombre':nombre,
+		'apellidos':apellidos,
+		'correo':correo,
+		'dianacimiento':dianacimiento,
+		'mesnacimiento':mesnacimiento,
+		'anonacimiento':anonacimiento,
+		'direccion':direccion,
+		'password':password,
+		'numerovisa':numerovisa,
+		'formapago':formapago
+	}
+	db.insert(usuario)
 
+def getNombre(nombre):
+	results = db.find({'nombre':nombre})
+	for record in results:
+		return record['nombre']
 
-def getNombre():
-	return ""
+def getApellidos(nombre):
+	results = db.find({'nombre':nombre})
+	for record in results:
+		return record['apellidos']
 
-def getApellidos():
-	return ""
+def getCorreo(nombre):
+	results = db.find({'nombre':nombre})
+	for record in results:
+		return record['correo']
 
-def getCorreo():
-	return ""
+def getDiaNacimiento(nombre):
+	results = db.find({'nombre':nombre})
+	for record in results:
+		return record['dianacimiento']
 
-def getDiaNacimiento():
-	return ""
+def getMesNacimiento(nombre):
+	results = db.find({'nombre':nombre})
+	for record in results:
+		return record['mesnacimiento']
 
-def getMesNacimiento():
-	return ""
+def getPassword(nombre):
+	results = db.find({'nombre':nombre})
+	for record in results:
+		return record['password']
 
-def getPassword():
-	return ""
+def getAnoNacimiento(nombre):
+	results = db.find({'nombre':nombre})
+	for record in results:
+		return record['anonacimiento']
 
-def getAnoNacimiento():
-	return ""
+def getDireccion(nombre):
+	results = db.find({'nombre':nombre})
+	for record in results:
+		return record['direccion']
 
-def getDireccion():
-	return ""
+def getNumeroVisa(nombre):
+	results = db.find({'nombre':nombre})
+	for record in results:
+		return record['numerovisa']
 
-def getNumeroVisa():
-	return ""
-
-def getFormaPago():
-	return ""
+def getFormaPago(nombre):
+	results = db.find({'nombre':nombre})
+	for record in results:
+		return record['formapago']
 
 
 def close():
-	db.close()
+	connection.close()

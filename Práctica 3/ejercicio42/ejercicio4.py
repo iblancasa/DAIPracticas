@@ -65,7 +65,7 @@ session = web.session.Session(app, web.session.DiskStore('sessions'),initializer
 def login(usuario,contrasena):
 	if usuario=="" or contrasena=="" or usuario==None or contrasena==None:
 		return False
-	elif usuario == DataBase.getNombre() and contrasena == DataBase.getPassword():
+	elif usuario == DataBase.getNombre(usuario) and contrasena == DataBase.getPassword(usuario):
 		return True
 	else:
 		return False
@@ -83,7 +83,7 @@ def addWeb(web):
         session.visitadas1=session.get('visitadas0')
         session.visitadas0=web
 
-        session.enlaces = "<ul><li><a href=\"modificar\">Modificar</a><li><a href=\""+session.get('visitadas0')+"\">"+session.get('visitadas0')+"</a></li>\
+        session.enlaces = "<ul><li><a href=\""+session.get('visitadas0')+"\">"+session.get('visitadas0')+"</a></li>\
         <li><a href=\""+session.get('visitadas1')+"\">"+session.get('visitadas1')+"</a></li>\
         <li><a href=\""+session.get('visitadas2')+"\">"+session.get('visitadas2')+"</a></li></ul>"
 
@@ -97,7 +97,7 @@ class index:
         if session.get('usuario') == None:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
-            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
+            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a><a href=\"modificar\">Modificar</a>"
         addWeb("/")
         formularioRegistro =  "<form name=\"main\" method=\"post\"> "+nuevousuario.render()+"</form>"
         return render.index(form=cabecera,enlaces=session.get('enlaces'),registro=formularioRegistro)
@@ -118,7 +118,7 @@ class index:
             	DataBase.close()
         else:
             session.usuario = form.d.user
-            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
+            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a><a href=\"modificar\">Modificar</a>"
             formularioRegistro=""
 
         addWeb("/")
@@ -134,7 +134,7 @@ class web1:
         if session.get('usuario') == None:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
-            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
+            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a><a href=\"modificar\">Modificar</a>"
         self.addWeb("web1")
         return render.pagina1(form=cabecera,enlaces=session.get('enlaces'))
 
@@ -160,7 +160,7 @@ class web1:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
-            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
+            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a><a href=\"modificar\">Modificar</a>"
         addWeb("web1")
            
         return render.pagina2(form=cabecera,enlaces=session.get('enlaces'))
@@ -172,7 +172,7 @@ class web2:
         if session.get('usuario') == None:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
-            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
+            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a><a href=\"modificar\">Modificar</a>"
         addWeb("web2")
         return render.pagina2(form=cabecera,enlaces=session.get('enlaces'))
 
@@ -185,7 +185,7 @@ class web2:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
-            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
+            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a><a href=\"modificar\">Modificar</a>"
         addWeb("web2")
            
         return render.pagina2(form=cabecera,enlaces=session.get('enlaces'))
@@ -196,7 +196,7 @@ class web3:
         if session.get('usuario') == None:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
-            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
+            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a><a href=\"modificar\">Modificar</a>"
         addWeb("web3")
         return render.pagina3(form=cabecera,enlaces=session.get('enlaces'))
 
@@ -208,7 +208,7 @@ class web3:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
-            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
+            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a><a href=\"modificar\">Modificar</a>"
         addWeb("web3")
            
         return render.pagina3(form=cabecera,enlaces=session.get('enlaces'))
@@ -219,7 +219,7 @@ class web4:
         if session.get('usuario') == None:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
-            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
+            cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a><a href=\"modificar\">Modificar</a>"
         addWeb("web4")
         return render.pagina4(form=cabecera,enlaces=session.get('enlaces'))
 
@@ -232,7 +232,7 @@ class web4:
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
-            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
+            cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a><a href=\"modificar\">Modificar</a>"
         addWeb("web4")
         return render.pagina4(form=cabecera,enlaces=session.get('enlaces'))
 
@@ -241,20 +241,20 @@ class web4:
 class modificar:
 
 	registro = form.Form(
-		    form.Textbox('nombre',form.Validator("El nombre no puede estar vacio", lambda i: i !=""),description="Nombre",value=DataBase.getNombre()),
-		    form.Textbox('apellidos',form.Validator("Los apellidos no pueden estar vacios", lambda i: i !=""),description="Apellidos",value=DataBase.getApellidos()),
-		    form.Textbox('correo',vemail,description="Correo",value=DataBase.getCorreo()),
+		    form.Textbox('nombre',form.Validator("El nombre no puede estar vacio", lambda i: i !=""),description="Nombre",value=DataBase.getNombre(session.get('usuario'))),
+		    form.Textbox('apellidos',form.Validator("Los apellidos no pueden estar vacios", lambda i: i !=""),description="Apellidos",value=DataBase.getApellidos(session.get('usuario'))),
+		    form.Textbox('correo',vemail,description="Correo",value=DataBase.getCorreo(session.get('usuario'))),
 		    form.Dropdown('dianacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
 		     (9, '9'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), 
-		     (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31')],description="Dia de nacimiento",value=DataBase.getDiaNacimiento()),
+		     (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31')],description="Dia de nacimiento",value=DataBase.getDiaNacimiento(session.get('usuario'))),
 		     form.Dropdown('mesnacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
-		     (9, '9'), (10, '10'), (11, '11'), (12, '12')],description="Mes de nacimiento",value=DataBase.getMesNacimiento()),
-		    form.Dropdown('anonacimiento',[(1993,'1993'),(1992,'1992'),(1991,'1991')],description="Ano nacimiento",value=DataBase.getAnoNacimiento()),
-		    form.Textarea('direccion',form.Validator("La direccion no puede estar vacia", lambda i: i !=""),description="Direccion",value=DataBase.getDireccion()),
+		     (9, '9'), (10, '10'), (11, '11'), (12, '12')],description="Mes de nacimiento",value=DataBase.getMesNacimiento(session.get('usuario'))),
+		    form.Dropdown('anonacimiento',[(1993,'1993'),(1992,'1992'),(1991,'1991')],description="Ano nacimiento",value=DataBase.getAnoNacimiento(session.get('usuario'))),
+		    form.Textarea('direccion',form.Validator("La direccion no puede estar vacia", lambda i: i !=""),description="Direccion",value=DataBase.getDireccion(session.get('usuario'))),
 		    form.Password('password',vpass,description="Password"),
 		    form.Password('password2',vpass,description="Verificacion"),
-		    form.Textbox('visa',vvisa,description="Numero visa",value=DataBase.getNumeroVisa()),
-		    form.Radio('formapago',['Contra reembolso','Tarjeta Visa'],value=DataBase.getFormaPago()),
+		    form.Textbox('visa',vvisa,description="Numero visa",value=DataBase.getNumeroVisa(session.get('usuario'))),
+		    form.Radio('formapago',['Contra reembolso','Tarjeta Visa'],value=DataBase.getFormaPago(session.get('usuario'))),
 		    form.Checkbox('aceptacion', form.Validator("Acepta las clausulas", lambda i: i == 'true'), value='true'),
 		    form.Button('submit',type="submit", description="Enviar"),
 		    validators = [
@@ -262,22 +262,22 @@ class modificar:
 		)
 
 	def GET(self):
-		cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
+		cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a><a href=\"modificar\">Modificar</a>"
 		self.registro = form.Form(
-		    form.Textbox('nombre',form.Validator("El nombre no puede estar vacio", lambda i: i !=""),description="Nombre",value=DataBase.getNombre()),
-		    form.Textbox('apellidos',form.Validator("Los apellidos no pueden estar vacios", lambda i: i !=""),description="Apellidos",value=DataBase.getApellidos()),
-		    form.Textbox('correo',vemail,description="Correo",value=DataBase.getCorreo()),
+		    form.Textbox('nombre',form.Validator("El nombre no puede estar vacio", lambda i: i !=""),description="Nombre",value=DataBase.getNombre(session.get('usuario'))),
+		    form.Textbox('apellidos',form.Validator("Los apellidos no pueden estar vacios", lambda i: i !=""),description="Apellidos",value=DataBase.getApellidos(session.get('usuario'))),
+		    form.Textbox('correo',vemail,description="Correo",value=DataBase.getCorreo(session.get('usuario'))),
 		    form.Dropdown('dianacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
 		     (9, '9'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), 
-		     (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31')],description="Dia de nacimiento",value=DataBase.getDiaNacimiento()),
+		     (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31')],description="Dia de nacimiento",value=DataBase.getDiaNacimiento(session.get('usuario'))),
 		     form.Dropdown('mesnacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
-		     (9, '9'), (10, '10'), (11, '11'), (12, '12')],description="Mes de nacimiento",value=DataBase.getMesNacimiento()),
-		    form.Dropdown('anonacimiento',[(1993,'1993'),(1992,'1992'),(1991,'1991')],description="Ano nacimiento",value=DataBase.getAnoNacimiento()),
-		    form.Textarea('direccion',form.Validator("La direccion no puede estar vacia", lambda i: i !=""),description="Direccion",value=DataBase.getDireccion()),
+		     (9, '9'), (10, '10'), (11, '11'), (12, '12')],description="Mes de nacimiento",value=DataBase.getMesNacimiento(session.get('usuario'))),
+		    form.Dropdown('anonacimiento',[(1993,'1993'),(1992,'1992'),(1991,'1991')],description="Ano nacimiento",value=DataBase.getAnoNacimiento(session.get('usuario'))),
+		    form.Textarea('direccion',form.Validator("La direccion no puede estar vacia", lambda i: i !=""),description="Direccion",value=DataBase.getDireccion(session.get('usuario'))),
 		    form.Password('password',vpass,description="Password"),
 		    form.Password('password2',vpass,description="Verificacion"),
-		    form.Textbox('visa',vvisa,description="Numero visa",value=DataBase.getNumeroVisa()),
-		    form.Radio('formapago',['Contra reembolso','Tarjeta Visa'],value=DataBase.getFormaPago()),
+		    form.Textbox('visa',vvisa,description="Numero visa",value=DataBase.getNumeroVisa(session.get('usuario'))),
+		    form.Radio('formapago',['Contra reembolso','Tarjeta Visa'],value=DataBase.getFormaPago(session.get('usuario'))),
 		    form.Checkbox('aceptacion', form.Validator("Acepta las clausulas", lambda i: i == 'true'), value='true'),
 		    form.Button('submit',type="submit", description="Enviar"),
 		    validators = [
@@ -291,7 +291,7 @@ class modificar:
 
 	def POST(self):
 		formulariomodificar = self.registro()
-		cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
+		cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a><a href=\"modificar\">Modificar</a>"
 		if formulariomodificar.validates():
 			DataBase.insertar(formulariomodificar.d.nombre,formulariomodificar.d.apellidos,formulariomodificar.d.correo,formulariomodificar.d.dianacimiento,formulariomodificar.d.mesnacimiento,
     			formulariomodificar.d.anonacimiento,formulariomodificar.d.direccion,formulariomodificar.d.password,formulariomodificar.d.visa,formulariomodificar.d.formapago)

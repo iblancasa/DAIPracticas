@@ -45,6 +45,12 @@ p a:hover,
 	height: 208px;
 	width: 100%;
 }
+
+#header a{
+	color: red;
+	padding: 1%;
+}
+
 #header div {
 	background: url(../images/bg-header1.jpg) no-repeat;
 	height: 103px;
