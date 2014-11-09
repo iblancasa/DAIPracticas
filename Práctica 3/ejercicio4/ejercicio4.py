@@ -13,6 +13,7 @@ urls = (
         '/web3','web3',
         '/web4','web4',
         '/salir','logout',
+        '/modificar','modificar',
         '/', 'index'
         )
 
@@ -114,6 +115,7 @@ class index:
             	formularioRegistro=""
             	DataBase.insertar(nuevousuario.d.nombre,nuevousuario.d.apellidos,nuevousuario.d.correo,nuevousuario.d.dianacimiento,nuevousuario.d.mesnacimiento,
             		nuevousuario.d.anonacimiento,nuevousuario.d.direccion,nuevousuario.d.password,nuevousuario.d.visa,nuevousuario.d.formapago)
+            	DataBase.close()
         else:
             session.usuario = form.d.user
             cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
@@ -236,11 +238,76 @@ class web4:
 
 
 
+class modificar:
+
+	registro = form.Form(
+		    form.Textbox('nombre',form.Validator("El nombre no puede estar vacio", lambda i: i !=""),description="Nombre",value=DataBase.getNombre()),
+		    form.Textbox('apellidos',form.Validator("Los apellidos no pueden estar vacios", lambda i: i !=""),description="Apellidos",value=DataBase.getApellidos()),
+		    form.Textbox('correo',vemail,description="Correo",value=DataBase.getCorreo()),
+		    form.Dropdown('dianacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
+		     (9, '9'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), 
+		     (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31')],description="Dia de nacimiento",value=DataBase.getDiaNacimiento()),
+		     form.Dropdown('mesnacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
+		     (9, '9'), (10, '10'), (11, '11'), (12, '12')],description="Mes de nacimiento",value=DataBase.getMesNacimiento()),
+		    form.Dropdown('anonacimiento',[(1993,'1993'),(1992,'1992'),(1991,'1991')],description="Ano nacimiento",value=DataBase.getAnoNacimiento()),
+		    form.Textarea('direccion',form.Validator("La direccion no puede estar vacia", lambda i: i !=""),description="Direccion",value=DataBase.getDireccion()),
+		    form.Password('password',vpass,description="Password"),
+		    form.Password('password2',vpass,description="Verificacion"),
+		    form.Textbox('visa',vvisa,description="Numero visa",value=DataBase.getNumeroVisa()),
+		    form.Radio('formapago',['Contra reembolso','Tarjeta Visa'],value=DataBase.getFormaPago()),
+		    form.Checkbox('aceptacion', form.Validator("Acepta las clausulas", lambda i: i == 'true'), value='true'),
+		    form.Button('submit',type="submit", description="Enviar"),
+		    validators = [
+		        form.Validator("Las pass no coinciden", lambda i: i.password == i.password2)]
+		)
+
+	def GET(self):
+		cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
+		self.registro = form.Form(
+		    form.Textbox('nombre',form.Validator("El nombre no puede estar vacio", lambda i: i !=""),description="Nombre",value=DataBase.getNombre()),
+		    form.Textbox('apellidos',form.Validator("Los apellidos no pueden estar vacios", lambda i: i !=""),description="Apellidos",value=DataBase.getApellidos()),
+		    form.Textbox('correo',vemail,description="Correo",value=DataBase.getCorreo()),
+		    form.Dropdown('dianacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
+		     (9, '9'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), 
+		     (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31')],description="Dia de nacimiento",value=DataBase.getDiaNacimiento()),
+		     form.Dropdown('mesnacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
+		     (9, '9'), (10, '10'), (11, '11'), (12, '12')],description="Mes de nacimiento",value=DataBase.getMesNacimiento()),
+		    form.Dropdown('anonacimiento',[(1993,'1993'),(1992,'1992'),(1991,'1991')],description="Ano nacimiento",value=DataBase.getAnoNacimiento()),
+		    form.Textarea('direccion',form.Validator("La direccion no puede estar vacia", lambda i: i !=""),description="Direccion",value=DataBase.getDireccion()),
+		    form.Password('password',vpass,description="Password"),
+		    form.Password('password2',vpass,description="Verificacion"),
+		    form.Textbox('visa',vvisa,description="Numero visa",value=DataBase.getNumeroVisa()),
+		    form.Radio('formapago',['Contra reembolso','Tarjeta Visa'],value=DataBase.getFormaPago()),
+		    form.Checkbox('aceptacion', form.Validator("Acepta las clausulas", lambda i: i == 'true'), value='true'),
+		    form.Button('submit',type="submit", description="Enviar"),
+		    validators = [
+		        form.Validator("Las pass no coinciden", lambda i: i.password == i.password2)]
+		)
+
+		formulariomodificar = self.registro()
+		return render.modificar(form=cabecera,enlaces=session.get('enlaces'),modificar="<form name=\"main\" method=\"post\"> "+formulariomodificar.render()+"</form>")
+
+
+
+	def POST(self):
+		formulariomodificar = self.registro()
+		cabecera = "Bienvenido "+session.get('usuario')+"   <a href=\"salir\">SALIR</a>"
+		if formulariomodificar.validates():
+			DataBase.insertar(formulariomodificar.d.nombre,formulariomodificar.d.apellidos,formulariomodificar.d.correo,formulariomodificar.d.dianacimiento,formulariomodificar.d.mesnacimiento,
+    			formulariomodificar.d.anonacimiento,formulariomodificar.d.direccion,formulariomodificar.d.password,formulariomodificar.d.visa,formulariomodificar.d.formapago)
+		        return render.modificar(form=cabecera,enlaces=session.get('enlaces'),modificar="<p>TODO INSERTADO</p><form name=\"main\" method=\"post\"> "+formulariomodificar.render()+"</form>")
+		else:
+			return render.modificar(form=cabecera,enlaces=session.get('enlaces'),modificar="<form name=\"main\" method=\"post\"> "+formulariomodificar.render()+"</form>")
+
+
+
 
 class logout:
     def GET(self):
         session.kill()
         raise web.seeother('/')
+
+
 
 
 if __name__ == "__main__":
