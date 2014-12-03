@@ -19,7 +19,7 @@ class ParseRssNews ():
     def start (self, tag, attrib): # Etiquetas de inicio
         if tag=="item":
             self.noticias += 1
-        elif tag=="enclosure" and attrib['type']=="image/png":
+        elif tag=="enclosure" and (attrib['type']=="image/png" or attrib['type']=="image/jpeg"):
             self.imagen += 1
             url=attrib['url']
             filename = url[url.rfind("/") + 1:]
