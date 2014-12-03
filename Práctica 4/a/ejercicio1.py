@@ -30,6 +30,7 @@ class ParseRssNews ():
 
     def data (self, data): # texto
         if data.find(self.termino)>=0:
+            print data
             self.cantidadTermino+=1
 
     def close (self):

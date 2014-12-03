@@ -19,6 +19,8 @@ noticias = len(items)
 imagenes=0
 interesantes=0
 
+termino = sys.argv[1]
+
 for a in items:
         enclosures =a.findall('enclosure')
         for e in enclosures:
@@ -28,9 +30,9 @@ for a in items:
                 filename = url[url.rfind("/") + 1:]
                 urllib.urlretrieve(url,filename)
 
-        if a.find("content").text.find("del")>=0:
+        if a.find("content").text.find(termino)>=0:
             interesantes+=1
 
 print "Nº imágenes " + str(imagenes)
 print "Nº noticias " + str(noticias)
-print "Nº noticias con térmito interesante " + str(noticias)
+print "Nº noticias con térmito interesante " + str(interesantes)
