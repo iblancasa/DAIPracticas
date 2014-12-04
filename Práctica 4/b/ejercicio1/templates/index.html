@@ -1,0 +1,57 @@
+## File: templates/index.html
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="uft-8">
+    <title>Práctica 4 - B</title>
+  </head>
+  <body>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/highcharts-3d.js"></script>
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <script type="text/javascript">
+      ${grafico}
+
+      $.get('http://opendata.ugr.es/dataset/002a1a83-7028-4504-ba82-18fe09418f20/resource/39ed2a5f-55fe-4e87-aaf9-272cd2982080/download/pruebadeaccesoconvocatoriadejunio.csv', function(data) {
+        // Split the lines
+        var lines = data.split('\n');
+
+        // Iterate over the lines and add categories or series
+        $.each(lines, function(lineNo, line) {
+          var items = line.split(',');
+
+          // header line containes categories
+          if (lineNo == 0) {
+            $.each(items, function(itemNo, item) {
+              if (itemNo > 0) options.xAxis.categories.push(item);
+            });
+          }
+
+          // the rest of the lines contain data with their name in the first
+          // position
+          else {
+            var series = {
+              data: []
+            };
+            $.each(items, function(itemNo, item) {
+              if (itemNo == 0) {
+                series.name = item;
+              } else {
+                series.data.push(parseFloat(item));
+              }
+            });
+
+            options.series.push(series);
+
+          }
+
+        });
+
+        // Create the chart
+        var chart = new Highcharts.Chart(options);
+      });
+    </script>
+  </body>
+</html>
