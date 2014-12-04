@@ -1,0 +1,186 @@
+## File: templates/index.html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>Rutas por monumentos</title>
+  <style>
+  html, body, #map-canvas {
+    height: 100%;
+    margin: 0px;
+    padding: 0px
+  }
+  #panel {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    margin-left: -180px;
+    z-index: 5;
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #999;
+  }
+  </style>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+  <script>
+  var directionsDisplay;
+  var directionsService = new google.maps.DirectionsService();
+  var map;
+
+  function initialize() {
+    directionsDisplay = new google.maps.DirectionsRenderer();
+    var inicio = new google.maps.LatLng(40.4378271, -3.6795367);
+    var mapOptions = {
+      zoom: 7,
+      center: inicio
+    }
+    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+    directionsDisplay.setMap(map);
+
+
+    var image = 'static/iconos/sevilla.png';
+    var sevilla = new google.maps.LatLng(37.3753708, -5.9550582);
+    var giralda = new google.maps.Marker({
+      position: sevilla,
+      map: map,
+      icon: image
+    });
+
+    google.maps.event.addListener(giralda, 'click', function() {
+      if(localStorage.getItem("ruta")==""){
+        localStorage.setItem("ruta",localStorage.getItem("ruta")+"sevilla,es");
+      }
+      else{
+        localStorage.setItem("ruta",localStorage.getItem("ruta")+":sevilla,es");
+      }
+      calcRoute();
+    });
+
+    image = 'static/iconos/granada.png';
+    var granada = new google.maps.LatLng(37.1809462, -3.5922032);
+    var alhambra = new google.maps.Marker({
+      position: granada,
+      map: map,
+      icon: image
+    });
+
+    google.maps.event.addListener(alhambra, 'click', function() {
+      if(localStorage.getItem("ruta")==""){
+        localStorage.setItem("ruta",localStorage.getItem("ruta")+"granada,es");
+      }
+      else{
+        localStorage.setItem("ruta",localStorage.getItem("ruta")+":granada,es");
+      }
+      calcRoute();
+    });
+
+    image = 'static/iconos/cordoba.png';
+    var cordoba = new google.maps.LatLng(37.891586, -4.7844853);
+    var mezquita = new google.maps.Marker({
+      position: cordoba,
+      map: map,
+      icon: image
+    });
+
+    google.maps.event.addListener(mezquita, 'click', function() {
+      if(localStorage.getItem("ruta")==""){
+        localStorage.setItem("ruta",localStorage.getItem("ruta")+"cordoba,es");
+      }
+      else{
+        localStorage.setItem("ruta",localStorage.getItem("ruta")+":cordoba,es");
+      }
+      calcRoute();
+    });
+
+    image = 'static/iconos/madrid.png';
+    var madrid = new google.maps.LatLng(40.4378271, -3.6795367);
+    var puertaalcala = new google.maps.Marker({
+      position: madrid,
+      map: map,
+      icon: image
+    });
+
+    google.maps.event.addListener(puertaalcala, 'click', function() {
+      if(localStorage.getItem("ruta")==""){
+        localStorage.setItem("ruta",localStorage.getItem("ruta")+"madrid,es");
+      }
+      else{
+        localStorage.setItem("ruta",localStorage.getItem("ruta")+":madrid,es");
+      }
+
+      calcRoute();
+    });
+
+    image = 'static/iconos/valencia.png';
+    var valencia = new google.maps.LatLng(39.4077852, -0.3615113);
+    var museoartesyciencias = new google.maps.Marker({
+      position: valencia,
+      map: map,
+      icon: image
+    });
+
+    google.maps.event.addListener(museoartesyciencias, 'click', function() {
+      if(localStorage.getItem("ruta")==""){
+        localStorage.setItem("ruta",localStorage.getItem("ruta")+"valencia,es");
+      }
+      else{
+        localStorage.setItem("ruta",localStorage.getItem("ruta")+":,es");
+      }
+      calcRoute();
+    });
+
+    image = 'static/iconos/barcelona.png';
+    var barcelona = new google.maps.LatLng(41.39479,2.1487679);
+    var sagradafamilia = new google.maps.Marker({
+      position: barcelona,
+      map: map,
+      icon: image
+    });
+
+    google.maps.event.addListener(sagradafamilia, 'click', function() {
+      if(localStorage.getItem("ruta")==""){
+        localStorage.setItem("ruta",localStorage.getItem("ruta")+"barcelona,es");
+      }
+      else{
+        localStorage.setItem("ruta",localStorage.getItem("ruta")+":barcelona,es");
+      }
+      calcRoute();
+    });
+  }
+
+  function calcRoute() {
+    var start = "madrid";
+    var end = start;
+    var waypts = [];
+
+    var ciudades = localStorage.getItem("ruta").split(":");
+
+    for(var i=0;i<ciudades.length;i++){
+      waypts.push({
+        location:ciudades[i],
+        stopover:true});
+      }
+
+      var request = {
+        origin: start,
+        destination: end,
+        waypoints: waypts,
+        optimizeWaypoints: true,
+        travelMode: google.maps.TravelMode.DRIVING
+      };
+      directionsService.route(request, function(response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+          directionsDisplay.setDirections(response);
+        }
+      });
+    }
+    localStorage.setItem("ruta","")
+    console.log(localStorage.getItem("ruta"));
+    google.maps.event.addDomListener(window, 'load', initialize);
+  </script>
+</head>
+<body>
+  <div id="map-canvas" style="float:left;width:100%;height:100%;"></div>
+</body>
+</html>
