@@ -1,57 +1,93 @@
 ## File: templates/index.html
-
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-  <head>
-    <meta charset="uft-8">
-    <title>Práctica 4 - B</title>
-  </head>
-  <body>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="http://code.highcharts.com/highcharts.js"></script>
-    <script src="http://code.highcharts.com/highcharts-3d.js"></script>
-    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-    <script type="text/javascript">
-      ${grafico}
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Highcharts Example</title>
 
-      $.get('http://opendata.ugr.es/dataset/002a1a83-7028-4504-ba82-18fe09418f20/resource/39ed2a5f-55fe-4e87-aaf9-272cd2982080/download/pruebadeaccesoconvocatoriadejunio.csv', function(data) {
-        // Split the lines
-        var lines = data.split('\n');
 
-        // Iterate over the lines and add categories or series
-        $.each(lines, function(lineNo, line) {
-          var items = line.split(',');
+  <!-- 1. Add these JavaScript inclusions in the head of your page -->
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+  <script src="http://code.highcharts.com/highcharts-3d.js"></script>
 
-          // header line containes categories
-          if (lineNo == 0) {
-            $.each(items, function(itemNo, item) {
-              if (itemNo > 0) options.xAxis.categories.push(item);
-            });
-          }
+  <!-- 2. Add the JavaScript to initialize the chart on document ready -->
+  <script type="text/javascript">
+  $(document).ready(function() {
+    var options = {
+      chart: {
+        type: 'column',
+        renderTo: 'container',
+        margin: 75,
+        options3d: {
+          enabled: true,
+          alpha: 15,
+          beta: 15,
+          depth: 110
+        }
+      },
+      title: {
+        text: 'Demanda académica: extraordinaria de septiembre 2013'
+      },
+      xAxis: {
+        categories: []
+      },
+      yAxis: {
+        title: {
+          text: 'Solicitudes'
+        }
+      },
+      series: []
+    };
 
-          // the rest of the lines contain data with their name in the first
-          // position
-          else {
-            var series = {
-              data: []
-            };
-            $.each(items, function(itemNo, item) {
+    $.get('http://opendata.ugr.es/dataset/7f5a6a24-d1ab-42dc-a497-b429413760c6/resource/88c7eb60-d29a-4833-95da-8338ea64d1b2/download/pruebadeaccesoconvocatoriaextraordinariadeseptiembre.csv', function(data) {
+      // Split the lines
+      var lines = data.split('\n');
+      var contar=0;
+      $.each(lines, function(lineNo, line) {
+
+
+        var items = line.split(',');
+        // header line containes categories
+        if (lineNo == 0) {
+          $.each(items, function(itemNo, item) {
+            if (itemNo > 0) options.xAxis.categories.push(item);
+          });
+        }
+
+        else {
+          var series = {
+            data:[],
+          };
+
+          $.each(items, function(itemNo, item) {
+            if(item!=""){
               if (itemNo == 0) {
                 series.name = item;
-              } else {
-                series.data.push(parseFloat(item));
+              } else{
+                series.data.push(parseFloat(item.substring(1, item.length - 2)));
               }
-            });
+            }
+          });
 
-            options.series.push(series);
-
-          }
-
-        });
-
-        // Create the chart
-        var chart = new Highcharts.Chart(options);
+          contar++;
+          if(contar<=lines.length-2)
+          options.series.push(series);
+        }
       });
-    </script>
-  </body>
+      console.log(options.series);
+      var chart = new Highcharts.Chart(options);
+    });
+
+
+  });
+</script>
+
+</head>
+<body>
+
+  <div id="container" style="width: 800px; height: 400px; margin: 0 auto"></div>
+  <p><a href="http://opendata.ugr.es/">Datos extraídos de UGR OPEN DATA</a></p>
+
+</body>
 </html>
