@@ -23,22 +23,22 @@ ultimoTweet = yo[0].id
 tweets = api.search(q='python',lang="es", since_id=ultimoTweet)
 total=0
 
-while True:
-    tweets = api.search(q='python', since_id=ultimoTweet)
-    for tweet in tweets:
-        if not "RT" in tweet.text and not "@" in tweet.text:
-            total+=1
-            print tweet.id
-            print "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-            print "Retweet a:"
-            print tweet.author.name
-            print tweet.text
-            api.retweet(tweet.id)
+
+tweets = api.search(q='python', since_id=ultimoTweet)
+for tweet in tweets:
+    if not "RT" in tweet.text and not "@" in tweet.text:
+        total+=1
+        print tweet.id
+        print "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+        print "Retweet a:"
+        print tweet.author.name
+        print tweet.text
+        api.retweet(tweet.id)
 
 
-            if(ultimoTweet<tweet.id):
-                ultimoTweet=tweet.id
-            time.sleep(5)
+        if(ultimoTweet<tweet.id):
+            ultimoTweet=tweet.id
+        time.sleep(5)
 
     if(total>0):
         api.update_status('LOCOS POR PYTHON :D. '+ str(total)+' nuevos retweets')
