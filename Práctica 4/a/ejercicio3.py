@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+'''
+Existen varias bibliotecas especializadas que permiten acceder a contenidos
+RSS específicamente de manera muy sencilla. Por ejemplo, la biblioteca Universal Feed Parser
+permite acceder a feeds RSS remotos de manera muy sencilla.
+Implemente un script en Python que use dicha biblioteca y que realice las
+mismas acciones que en los puntos anteriores.
+'''
 
 import feedparser
 import urllib

@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+'''
+Otra manera de manejar XML es a través de bibliotecas de manejo del DOM,
+donde el fichero XML se carga en memoria en una estructura de  ́arbol que puede ser recorrida fácilmente. La biblioteca lxml
+tiene la posibilidad de acceder a ficheros XML usando este tipo de acceso, usando el módulo etree.
+Realice un script similar al del punto anterior pero usando esta tecnología DOM.
+'''
+
 from lxml import etree
 import urllib
 import sys

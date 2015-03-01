@@ -1,6 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+'''
+Desarrolle una aplicación web sencilla que nos permita crear una imagen
+SVG dinámica (que cambie cada vez que visitemos la página) y aleatoria. Por
+ejemplo, que cada vez que se visite la página dibuje elipses, rectángulos, etc. de
+colores y posiciones distintas.
+'''
+
 import drawSVG
 import random
 import web
@@ -10,14 +17,14 @@ urls = ('/', 'index')
 app = web.application(urls, globals())
 
 
-class index: 
-  def GET(self): 
+class index:
+  def GET(self):
     generarFigura();
     return  "<html><body><img src=\"static/test.svg\"/></html></body>"
 
 
 def generarFigura():
-  numero = random.randrange(1, 4, 1) 
+  numero = random.randrange(1, 4, 1)
 
   if numero==1:
     my_svg = drawSVG.SVG({'width':200, 'height':100})
@@ -37,7 +44,7 @@ def generarFigura():
     my_svg.addChildElement('rect', {'x':20, 'y':90, 'width':10, 'height':5})
     my_svg.addChildElement('rect', {'x':10, 'y':100, 'width':100, 'height':24})
     my_svg.addChildElement('circle', {'cx':120, 'cy':40, 'r':25})
-  
+
   my_svg.outputToFile('static/test.svg')
   print numero
 

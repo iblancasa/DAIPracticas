@@ -1,5 +1,23 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
+
+'''
+En toda aplicación web es necesario gestionar información que se mantenga
+entre las distintas páginas que visita el usuario. Para ello se hace uso de las
+sesiones. En web.py las sesiones se manejan mediante la clase Session.
+En esta práctica adaptaremos nuestra página web para que el formulario de
+login anteriormente citado funcione correctamente y se muestre distinto con-
+tenido si el usuario está ya identificado o no (a esta alturas la comprobación
+de un usuario único estará codificada "a pelo" en la aplicación, en el siguiente
+apartado guardaremos distintos usuarios usando persistencia). Por ejemplo, el
+formulario de login de la cabecera solo debe aparecerle a los usuario no identificados, mientras que a los
+identificados debe mostrárseles el típico mensaje de
+"Bienvenido xxxx" y un enlace para hacer logout.
+Además, implementaremos en nuestra aplicación (y utilizando exclusivamente sesiones) un "menu"
+que muestre -y permita acceder- a las últimas 3 páginas del sitio visitadas
+(lo podemos incluir en el menú de la izquierda).
+'''
+
 
 import web
 from web import form
@@ -65,7 +83,7 @@ class index:
 
     def POST(self):
         form = myform()
-        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')): 
+        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')):
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form><p>EL LOGIN FALLO</p>"
         else:
             session.usuario = form.d.user
@@ -105,7 +123,7 @@ class web1:
 
     def POST(self):
         form = myform()
-        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')): 
+        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')):
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form><p>EL LOGIN FALLO</p>"
         else:
             session.usuario = form.d.user
@@ -128,13 +146,13 @@ class web2:
 
     def POST(self):
         form = myform()
-        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')): 
+        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')):
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form><p>EL LOGIN FALLO</p>"
         else:
             session.usuario = form.d.user
             cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
         addWeb("web2")
-           
+
         return render.pagina2(form=cabecera,enlaces=session.get('enlaces'))
 
 class web3:
@@ -151,13 +169,13 @@ class web3:
 
     def POST(self):
         form = myform()
-        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')): 
+        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')):
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form><p>EL LOGIN FALLO</p>"
         else:
             session.usuario = form.d.user
             cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a>"
         addWeb("web3")
-           
+
         return render.pagina3(form=cabecera,enlaces=session.get('enlaces'))
 
 class web4:
@@ -175,7 +193,7 @@ class web4:
 
     def POST(self):
         form = myform()
-        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')): 
+        if (not form.validates() or form.d.user!="dai" or form.d.password !="dai") and (not hasattr(session, 'usuario')):
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form><p>EL LOGIN FALLO</p>"
         else:
             session.usuario = form.d.user

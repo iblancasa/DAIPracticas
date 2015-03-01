@@ -1,16 +1,27 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
+
+'''
+Averigüe el mecanismo más habitual que ofrece web.py para servir contenidos estáticos tales como
+imágenes u hojas de estilo. Añada algunas imágenes estáticas a su aplicación y compruebe que el
+cliente es capaz de acceder a ellas directamente a través de una URL.
+Aunque el método habitual para servir p ́aginas web de web.py es el uso de templates, modifique el ejemplo original del punto
+anterior para generar en vez de simplemente el código Hello, World!, generar un fichero HTML correcto en
+el que se incluya, entre los demás elementos necesarios, una página de estilo CSS
+y alguna imagen estática.
+''''
+
 
 import web
-        
+
 urls = (
     '/(.*)', 'hello'
 )
 app = web.application(urls, globals())
 
-class hello:        
+class hello:
     def GET(self, name):
-        if not name: 
+        if not name:
             name = 'World'
 
         web = '<!doctype html>\n \

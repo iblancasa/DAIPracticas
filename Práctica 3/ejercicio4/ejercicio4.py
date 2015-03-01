@@ -1,5 +1,19 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
+
+'''
+Para almacenar la informaci ́on de nuestra aplicaci ́on podemos utilizar dis-
+tintos mecanismos de persistencia. Cuando la aplicaci ́on sea suficientemente
+sencilla podemos utilizar algún esquema de almacenamiento local, como por
+ejemplo la biblioteca dbm o anydbm.
+En esta práctica usaremos dicha base de datos para almacenar la información del formulario de datos de usuario
+de la sección 1 una vez haya sido validada.
+Crearemos una página nueva de nuestra aplicación que nos permita visualizar
+los datos del usuario (tendremos acceso a través del menú a esta página cuando
+estemos identificados en la web). Asimismo crearemos una nueva página que le
+permita al usuario cambiar los datos personales (volviendo a mandar el formu-
+lario, que aparecerá relleno con los datos anteriores).
+'''
 
 import web
 from web import form
@@ -42,7 +56,7 @@ registro = form.Form(
     form.Textbox('apellidos',form.Validator("Los apellidos no pueden estar vacios", lambda i: i !=""),description="Apellidos"),
     form.Textbox('correo',vemail,description="Correo"),
     form.Dropdown('dianacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
-     (9, '9'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), 
+     (9, '9'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'),
      (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31')],description="Dia de nacimiento"),
      form.Dropdown('mesnacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
      (9, '9'), (10, '10'), (11, '11'), (12, '12')],description="Mes de nacimiento"),
@@ -107,7 +121,7 @@ class index:
     def POST(self):
         form = myform()
         nuevousuario = registro()
-        if (not form.validates() or not login(form.d.user,form.d.contrasena)) and (not hasattr(session, 'usuario')): 
+        if (not form.validates() or not login(form.d.user,form.d.contrasena)) and (not hasattr(session, 'usuario')):
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
             if not nuevousuario.validates():
             	formularioRegistro =  "<form name=\"main\" method=\"post\"> "+nuevousuario.render()+"</form>"
@@ -153,16 +167,16 @@ class web1:
         session.enlaces = "<ul><li><a href=\""+session.get('visitadas0')+"\">"+session.get('visitadas0')+"</a></li>\
         <li><a href=\""+session.get('visitadas1')+"\">"+session.get('visitadas1')+"</a></li>\
         <li><a href=\""+session.get('visitadas2')+"\">"+session.get('visitadas2')+"</a></li></ul>"
-    
+
     def POST(self):
         form = myform()
-       	if (not form.validates() or not login(form.d.user,form.d.contrasena)) and (not hasattr(session, 'usuario')): 
+       	if (not form.validates() or not login(form.d.user,form.d.contrasena)) and (not hasattr(session, 'usuario')):
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
             cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a> <li><a href=\"modificar\">Modificar</a><li> "
         addWeb("web1")
-           
+
         return render.pagina2(form=cabecera,enlaces=session.get('enlaces'))
 
 
@@ -181,13 +195,13 @@ class web2:
 
     def POST(self):
         form = myform()
-       	if (not form.validates() or not login(form.d.user,form.d.contrasena)) and (not hasattr(session, 'usuario')): 
+       	if (not form.validates() or not login(form.d.user,form.d.contrasena)) and (not hasattr(session, 'usuario')):
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
             cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a> <li><a href=\"modificar\">Modificar</a><li> "
         addWeb("web2")
-           
+
         return render.pagina2(form=cabecera,enlaces=session.get('enlaces'))
 
 class web3:
@@ -204,13 +218,13 @@ class web3:
 
     def POST(self):
         form = myform()
-        if (not form.validates() or not login(form.d.user,form.d.contrasena)) and (not hasattr(session, 'usuario')): 
+        if (not form.validates() or not login(form.d.user,form.d.contrasena)) and (not hasattr(session, 'usuario')):
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
             cabecera = "Bienvenido "+session.usuario+"   <a href=\"salir\">SALIR</a> <li><a href=\"modificar\">Modificar</a><li> "
         addWeb("web3")
-           
+
         return render.pagina3(form=cabecera,enlaces=session.get('enlaces'))
 
 class web4:
@@ -228,7 +242,7 @@ class web4:
 
     def POST(self):
         form = myform()
-       	if (not form.validates() or not login(form.d.user,form.d.contrasena)) and (not hasattr(session, 'usuario')): 
+       	if (not form.validates() or not login(form.d.user,form.d.contrasena)) and (not hasattr(session, 'usuario')):
             cabecera = "<form name=\"main\" method=\"post\"> "+form.render()+"</form>"
         else:
             session.usuario = form.d.user
@@ -245,7 +259,7 @@ class modificar:
 		    form.Textbox('apellidos',form.Validator("Los apellidos no pueden estar vacios", lambda i: i !=""),description="Apellidos",value=DataBase.getApellidos()),
 		    form.Textbox('correo',vemail,description="Correo",value=DataBase.getCorreo()),
 		    form.Dropdown('dianacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
-		     (9, '9'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), 
+		     (9, '9'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'),
 		     (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31')],description="Dia de nacimiento",value=DataBase.getDiaNacimiento()),
 		     form.Dropdown('mesnacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
 		     (9, '9'), (10, '10'), (11, '11'), (12, '12')],description="Mes de nacimiento",value=DataBase.getMesNacimiento()),
@@ -268,7 +282,7 @@ class modificar:
 		    form.Textbox('apellidos',form.Validator("Los apellidos no pueden estar vacios", lambda i: i !=""),description="Apellidos",value=DataBase.getApellidos()),
 		    form.Textbox('correo',vemail,description="Correo",value=DataBase.getCorreo()),
 		    form.Dropdown('dianacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
-		     (9, '9'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), 
+		     (9, '9'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'),
 		     (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31')],description="Dia de nacimiento",value=DataBase.getDiaNacimiento()),
 		     form.Dropdown('mesnacimiento',[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'), (7, '7'), (8, '8'),
 		     (9, '9'), (10, '10'), (11, '11'), (12, '12')],description="Mes de nacimiento",value=DataBase.getMesNacimiento()),

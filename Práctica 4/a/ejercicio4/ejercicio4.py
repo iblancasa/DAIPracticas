@@ -1,5 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+'''
+Basándonos en lo aprendido en los puntos anteriores, añadamos a nuestra
+web (de la práctica 3) algún cuadro en donde se muestren los últimos feeds de
+alguna fuente web que nos interese (periódico o web).
+Sería conveniente, por no abusar del proveedor del RSS, no consultarlo con
+demasiada frecuencia (por ejemplo como máximo cada 10 minutos). Para ello
+podemos hacer algún tipo de caché en nuestra base de datos (o en disco) de los
+RSS que vayamos a mostrar.
+'''
 
 import web
 from web import form
